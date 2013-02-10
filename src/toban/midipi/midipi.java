@@ -2,8 +2,7 @@
  * 
  */
 package toban.midipi;
-
-import toban.midipi.devices.PiStep;
+import toban.midipi.devices.*;
 
 /**
  * @author tobias
@@ -17,7 +16,7 @@ public class midipi {
 	public static void main(String[] args) 
 	{
 		// TODO Auto-generated method stub
-		PiStep sq = new PiStep();
+		PiSpeakJet sq = new PiSpeakJet();
 		sq.run();
 
 	}
