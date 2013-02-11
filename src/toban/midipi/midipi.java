@@ -3,6 +3,7 @@
  */
 package toban.midipi;
 import toban.midipi.devices.*;
+import toban.midipi.devices.PiSpeakJet.PiSpeakJet;
 
 /**
  * @author tobias
@@ -16,8 +17,16 @@ public class midipi {
 	public static void main(String[] args) 
 	{
 		// TODO Auto-generated method stub
-		PiSpeakJet sq = new PiSpeakJet();
-		sq.run();
+		
+		try {
+			PiSpeakJet sq;
+			sq = new PiSpeakJet();
+			sq.run();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 
 	}
 

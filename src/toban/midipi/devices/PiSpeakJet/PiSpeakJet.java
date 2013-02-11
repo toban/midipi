@@ -1,6 +1,9 @@
-package toban.midipi.devices;
+package toban.midipi.devices.PiSpeakJet;
 
 import java.util.List;
+
+import toban.midipi.util.PiSerial;
+
 import com.pi4j.io.gpio.*;
 import com.pi4j.io.gpio.event.GpioPinDigitalStateChangeEvent;
 import com.pi4j.io.gpio.event.GpioPinListenerDigital;
@@ -13,11 +16,12 @@ public class PiSpeakJet
 										PinPullResistance.PULL_DOWN);
 	final GpioPinDigitalOutput led1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_01);
 
-	public PiSpeakJet()
+	public PiSpeakJet() throws Exception
 	{
-		
-		
+		PiSerial.Init();
 	}
+	
+	
 	
 	public void run()
 	{
