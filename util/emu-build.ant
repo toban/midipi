@@ -1,0 +1,5 @@
+<project>
+  <exec executable="bash" newenvironment="false" dir=".">
+    <arg value="emu-build.sh"/>
+  </exec>
+</project>
