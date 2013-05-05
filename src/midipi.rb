@@ -1,6 +1,7 @@
 #! /usr/bin/ruby
 require 'wiringpi'
 require './init.rb'
+require './midi_listener.rb'
 
 
 
@@ -32,7 +33,8 @@ class MidiPi
 	end
 	
 	def speech_test
-
+		
+		
 		[20, 100, 23, 5, 21, 114, 22, 88, 191, 21, 114, 22, 88, 131, 21, 114, 22, 88, 145, 21, 114, 22, 88, 131, 21, 114, 22, 88, 185, 21, 114, 22, 88, 129, 21, 114, 22, 88, 182, 14, 21, 114, 22, 88, 137, 21, 114, 22, 88, 141].each do |i|
 			@ser.serialPutchar(i)
 		end
@@ -69,12 +71,16 @@ class MidiPi
 
 end
 
+threads = []
+threads << Thread.new {MidiListener.new.run} 
+	
 midipi = MidiPi.new
 midipi.set_serial_mode
 midipi.reset
-#sleep(1)
 midipi.speech_test
-#sleep(2)
 midipi.release
+
+threads.each { |t| t.join }
+puts "tits"
 
 
