@@ -1,0 +1,16 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ffi (1.8.1)
+    ffi-coremidi (0.1.8)
+      ffi (>= 1.0)
+    unimidi (0.3.3)
+      ffi-coremidi
+    wiringpi (1.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  unimidi
+  wiringpi (~> 1.1.0)
