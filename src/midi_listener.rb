@@ -1,10 +1,11 @@
 require 'unimidi'
 
 class MidiListener
-	attr_accessor :input, :buffer_pointer
+	attr_accessor :input, :buffer_pointer, :midipi
 	
-	def initialize
-		
+	def initialize(midipi)
+	
+		@midipi = midipi
 		@input = UniMIDI::Input.use(:first)
 		@buffer_pointer = 0
 		
@@ -18,9 +19,17 @@ class MidiListener
 			buffer_length = @input.buffer.length
 			if buffer_length > @buffer_pointer
 				msg = @input.buffer[@buffer_pointer]
-				if msg[:data] != [248]
-					puts "data: %s, timestamp: %s" % [msg[:data], msg[:timestamp]]
+				
+				msg[:data].each do |command| 
+					if command != 248
+						puts "data: %s, timestamp: %s" % [msg[:data], msg[:timestamp]]
+					end
+					
+					if command == 144
+						midipi.speech_test
+					end
 				end
+					
 				@buffer_pointer = buffer_length
 				
 			end

@@ -71,16 +71,18 @@ class MidiPi
 
 end
 
-threads = []
-threads << Thread.new {MidiListener.new.run} 
+
 	
 midipi = MidiPi.new
+
+threads = []
+threads << Thread.new {MidiListener.new(midipi).run} 
+
 midipi.set_serial_mode
 midipi.reset
-midipi.speech_test
-midipi.release
+
 
 threads.each { |t| t.join }
-puts "tits"
+midipi.release
 
 
