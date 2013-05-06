@@ -32,10 +32,30 @@ class MidiPi
 		@ser.serialPuts('A') # exit serial
 	end
 	
-	def speech_test
+	def speech_code(code)
+		@ser.serialPutchar(code)
+	end
+	
+	def speech_touch
+	
+		[20, 96, 21, 114, 22, 88, 23, 5, 8, 191, 8, 134, 182].each do |i|
+			@ser.serialPutchar(i)
+		end
+	end
+	
+	def speech_that
+	
+		[20, 96, 21, 114, 22, 88, 23, 5, 169, 8, 132, 8, 191].each do |i|
+			@ser.serialPutchar(i)
+		end
+	end
+
+	def speech_ass
 		
-		
+=begin
 		[20, 100, 23, 5, 21, 114, 22, 88, 191, 21, 114, 22, 88, 131, 21, 114, 22, 88, 145, 21, 114, 22, 88, 131, 21, 114, 22, 88, 185, 21, 114, 22, 88, 129, 21, 114, 22, 88, 182, 14, 21, 114, 22, 88, 137, 21, 114, 22, 88, 141].each do |i|
+=end		
+		[20, 96, 21, 114, 22, 88, 23, 5, 132, 132, 8, 187, 187, 187, 187, 187].each do |i|
 			@ser.serialPutchar(i)
 		end
 		#@ser.serialPuts('T')
