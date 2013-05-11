@@ -1,0 +1,24 @@
+LICENS FÖR LEXIKONET SVENSKA ORD/LEXIN
+######################################
+Svenska ord/LEXIN
+-----------------
+Svenska ord har tidigare publicerats i bokform av Skolverket, inom ramen för LEXIN-serien (Lexikon för invandrare). Ordboken har utarbetats i första hand för att tjäna som svenskt underlag för tvåspråkiga lexikon med svenska som utgångspunkt. Därutöver tjänar den i praktiken som en enspråkig svensk ordbok.
+
+Svenska ord har i allt väsentligt utarbetats vid Institutionen för svenska språket, närmare bestämt vid Språkdata som bl.a. sysslar med lexikologi och lexikografi. Närmare detaljer kring tillkomsten av ordboken ges i nedanstående kommentarer kring första och andra upplagan. En tredje upplaga har senare publicerats av Skolverket i bokform, dock utan de ursprungliga författarnas medverkan. 
+
+Institutionen har sedan 1995 inget samarbete inom LEXIN-projektet med Skolverket. För kommentarer kring ordbokstexten (särskilt
+Inledning som beskriver ordurval, källor, ordbokskategorier m.m.), se den tryckta versionen av Svenska ord, andra upplagan.
+
+Publicering
+-----------
+Svenska ord/LEXIN eller delar av den  får inte publiceras vara sig i tryckt eller elektroniskt format. Denna punkt innebär inte någon inskränkning i sedvanlig citaträtt för vetenskapliga artiklar o.d. Vid publicering av forskningsresultat där lexikonet använts refereras till lexikonet under namnet "Svenska ord/LEXIN vid Språkbanken, Göteborgs universitet".
+
+Återdistribution
+----------------
+Svenska ord/LEXIN får endast återdistribueras i den omfattning som krävs för att den ska användas inom ett visst forskningsprojekt eller viss universitetskurs. Studenter och medarbetare som får tillgång till lexikonet måste informeras om denna licens och dess innehåll. Lexikonet får alltså inte läggas upp på en allmänt tillgänglig ftp-server e.d.
+
+Modiering
+---------
+Modifierade versioner av lexikonet får spridas inom ett projekt eller en kursgrupp förutsatt att en notis om att det rör sig om en modifierad version fogas till licensen.
+
+Observera att detta är en preliminär licens som gäller fram till och med augusti 2002. Kontrollera därför eventulla ändringar i licenserna på Språkbankens hemsida efter detta datum.
