@@ -55,8 +55,6 @@ class MidiListener
 					end
 					
 					if command == @midichan.pitchbend
-						
-						puts "data: %s, timestamp: %s" % [msg[:data], msg[:timestamp]]
 						lsbvalue = getNextCommand(msg)
 						msbvalue = getNextCommand(msg)
 						midipi.command_pitch(msbvalue.nil? ? 0 : msbvalue, lsbvalue.nil? ? 0 : lsbvalue )
@@ -65,6 +63,19 @@ class MidiListener
 					end
 					
 					if command == @midichan.control_change
+						puts "data: %s, timestamp: %s" % [msg[:data], msg[:timestamp]]
+						
+						control = getNextCommand(msg)
+						value = getNextCommand(msg)
+						
+						value = value.nil? ? 114 : value
+						
+						case control
+							when 14
+								midipi.command_speed(value)
+							when 15
+								midipi.command_bend(value)
+						end
 						
 						next
 					end
@@ -109,12 +120,12 @@ class MidiListener
 end
 
 class MidiChannel
-	attr_accessor :pitchbend, :note_on, :note_off
+	attr_accessor :pitchbend, :note_on, :note_off, :control_change
 	
 	def initialize(pitchbend, note_on, note_off, control_change)
 		@note_on = note_on
 		@note_off = note_off
-		@control = control_change
+		@control_change = control_change
 		@pitchbend = pitchbend
 	end
 end
