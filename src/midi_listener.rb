@@ -1,7 +1,7 @@
 require 'unimidi'
 
 class MidiListener
-	attr_accessor :input, :buffer_pointer, :midipi, :msg_mean_time
+	attr_accessor :input, :buffer_pointer, :midipi, :msg_mean_time, :channels, :listening_channel, :cmd_i
 	
 	def initialize(midipi)
 	
@@ -9,6 +9,23 @@ class MidiListener
 		@input = UniMIDI::Input.use(:first)
 		@buffer_pointer = 0
 		
+		@channels = Array.new
+		for i in 0..15
+			@channels << MidiChannel.new(224+i,144+i, 128+i, 176+i)
+		end
+		
+		@midichan = @channels[0]
+		
+		
+	end
+	
+	def getNextCommand(msg)
+		if(@cmd_i+1 < msg[:data].length)
+			@cmd_i+=1
+			command = msg[:data][@cmd_i]
+			return command
+		end
+		return nil
 	end
 	
 	def run
@@ -27,36 +44,55 @@ class MidiListener
 				current_msg_time = Time.now
 				
 				
-				for i in 0..msg[:data].length-1
+				for @cmd_i in 0..msg[:data].length-1
 					
-		 			command = msg[:data][i]
+		 			command = msg[:data][@cmd_i]
 		 			
 					if command != 248
-						puts "data: %s, timestamp: %s" % [msg[:data], msg[:timestamp]]
+						#puts "data: %s, timestamp: %s" % [msg[:data], msg[:timestamp]]
 					else
 						#puts msg[:timestamp]
 					end
 					
-					if command == 144
+					if command == @midichan.pitchbend
 						
-						if(i+1 < msg[:data].length)
-							i+=1
-							note = msg[:data][i]
+						puts "data: %s, timestamp: %s" % [msg[:data], msg[:timestamp]]
+						lsbvalue = getNextCommand(msg)
+						msbvalue = getNextCommand(msg)
+						midipi.command_pitch(msbvalue.nil? ? 0 : msbvalue, lsbvalue.nil? ? 0 : lsbvalue )
+						next
+						
+					end
+					
+					if command == @midichan.control_change
+						
+						next
+					end
+					
+					if command == @midichan.note_on
+					
+						note = nil
+						note = getNextCommand(msg)
+						
+						if(!note.nil?)
 							
 							case note
 							
 							when 6
+								puts "touch"
 								midipi.speech_touch
 							when 7 
+								puts "that"
 								midipi.speech_that
 							when 9
+								puts "ass"
 								midipi.speech_ass	 
 							end
 							
 							#midipi.speech_code(128+note)
 						end
 				
-						#midipi.speech_test
+						next
 					end
 				end
 				
@@ -71,3 +107,15 @@ class MidiListener
 		end
 	end
 end
+
+class MidiChannel
+	attr_accessor :pitchbend, :note_on, :note_off
+	
+	def initialize(pitchbend, note_on, note_off, control_change)
+		@note_on = note_on
+		@note_off = note_off
+		@control = control_change
+		@pitchbend = pitchbend
+	end
+end
+

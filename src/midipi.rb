@@ -7,9 +7,10 @@ require './midi_listener.rb'
 
 class MidiPi
 
-	attr_accessor :ser
+	attr_accessor :ser, :pitch
 	def initialize
 		@ser = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
+		@pitch = 0
 	end
 	
 	def reset
@@ -32,20 +33,43 @@ class MidiPi
 		@ser.serialPuts('A') # exit serial
 	end
 	
+	def command_speed()
+	
+	end
+	
+	# midi from 0-127
+	#speakjet from 0-255
+	def command_pitch(midipitchMSB, midipitchLSB)
+
+		value = (midipitchMSB << 7) + midipitchLSB
+		
+		if(value > 8192)
+			normal = (value/16383.0)
+			speakjetValue = 88 + (167.0**(normal*normal)) 
+		else
+			speakjetValue = (176 / 16383.0) * value
+		end
+		
+		$log.debug("pitchbend: %s" % speakjetValue.round.to_i)
+		
+		@ser.serialPutchar(22)
+		@ser.serialPutchar(speakjetValue.round.to_i)
+	end
+	
 	def speech_code(code)
 		@ser.serialPutchar(code)
 	end
 	
 	def speech_touch
 	
-		[20, 96, 21, 114, 22, 88, 23, 5, 8, 191, 8, 134, 182].each do |i|
+		[20, 96, 21, 114, 23, 5, 8, 191, 8, 134, 182].each do |i|
 			@ser.serialPutchar(i)
 		end
 	end
 	
 	def speech_that
 	
-		[20, 96, 21, 114, 22, 88, 23, 5, 169, 8, 132, 8, 191].each do |i|
+		[20, 96, 21, 114, 88, 23, 5, 169, 8, 132, 8, 191].each do |i|
 			@ser.serialPutchar(i)
 		end
 	end
@@ -55,7 +79,7 @@ class MidiPi
 =begin
 		[20, 100, 23, 5, 21, 114, 22, 88, 191, 21, 114, 22, 88, 131, 21, 114, 22, 88, 145, 21, 114, 22, 88, 131, 21, 114, 22, 88, 185, 21, 114, 22, 88, 129, 21, 114, 22, 88, 182, 14, 21, 114, 22, 88, 137, 21, 114, 22, 88, 141].each do |i|
 =end		
-		[20, 96, 21, 114, 22, 88, 23, 5, 132, 132, 8, 187, 187, 187, 187, 187].each do |i|
+		[20, 96, 21, 114, 88, 23, 5, 132, 132, 8, 187, 187, 187, 187, 187].each do |i|
 			@ser.serialPutchar(i)
 		end
 		#@ser.serialPuts('T')
