@@ -89,15 +89,23 @@ class MidiListener
 							
 							case note
 							
-							when 6
+							when 1
 								puts "touch"
-								midipi.speech_touch
-							when 7 
+								midipi.speech("touch")
+							when 2 
 								puts "that"
-								midipi.speech_that
-							when 9
+								midipi.speech("that")
+							when 3
 								puts "ass"
-								midipi.speech_ass	 
+								midipi.speech("ass") 
+							when 4
+								midipi.speech("stay") 
+							when 5
+								midipi.speech("a") 
+							when 6
+								midipi.speech("while") 
+							when 7
+								midipi.speech("forever")
 							end
 							
 							#midipi.speech_code(128+note)

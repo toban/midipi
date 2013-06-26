@@ -2,15 +2,41 @@
 require 'wiringpi'
 require './init.rb'
 require './midi_listener.rb'
+require './program.rb'
 
 
 
 class MidiPi
 
-	attr_accessor :ser, :pitch, :speed, :bend
+	attr_accessor :ser, :pitch, :speed, :bend, :dict, :programs
+	
 	def initialize
-		@ser = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
+		#@ser = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
 		@pitch = 0
+		
+		@dict = {
+		"a" => [154, 128],
+		"stay" => [187, 191,154, 7, 128],
+		"while" => [185, 155, 8, 145],
+		"forever" => [186, 153, 130, 166, 7, 151],
+		"touch" => [20,8, 191, 8, 134, 182],
+		"that" => [20, 96, 88, 169, 8, 132, 8, 191],
+		"ass" => [20, 96, 88, 132, 132, 8, 187, 187]
+		}
+		
+		@programs = Hash.new
+		init_programs
+		
+	end
+	
+	def init_programs
+		$log.info("loading programs ...")
+		Dir["./programs/*.rb"].each {|file| require file }
+		
+		$programs.each do |program| 
+			@programs[program.program_id] = program
+		end
+		$log.info("loaded %s programs!" % programs.count)
 	end
 	
 	def reset
@@ -72,30 +98,18 @@ class MidiPi
 		@ser.serialPutchar(code)
 	end
 	
-	def speech_touch
-		@ser.serialPuts('T')
-		[20, 96, 8, 191, 8, 134, 182].each do |i|
+	def speech(word)
+		
+		sentence = nil
+		
+		sentence = @dict[word]
+		
+		if !sentence.nil? 
+			sentence.each do |i|
 			@ser.serialPutchar(i)
+			end
 		end
 	end
-	
-	def speech_that
-		@ser.serialPuts('T')
-		[20, 96, 88, 169, 8, 132, 8, 191].each do |i|
-			@ser.serialPutchar(i)
-		end
-	end
-
-	def speech_ass
-		@ser.serialPuts('T')
-=begin
-		[20, 100, 23, 5, 21, 114, 22, 88, 191, 21, 114, 22, 88, 131, 21, 114, 22, 88, 145, 21, 114, 22, 88, 131, 21, 114, 22, 88, 185, 21, 114, 22, 88, 129, 21, 114, 22, 88, 182, 14, 21, 114, 22, 88, 137, 21, 114, 22, 88, 141].each do |i|
-=end		
-		[20, 96, 88, 132, 132, 8, 187, 187, 187, 187, 187].each do |i|
-			@ser.serialPutchar(i)
-		end
-		#
-	end 
 	
 	
 	def osctest
