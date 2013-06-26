@@ -1,10 +1,16 @@
 require 'unimidi'
+require './midi_channel.rb'
 
+#
+# midi listener uses UniMidi to listen for messages and tell midipi what to do
 class MidiListener
-	attr_accessor :input, :buffer_pointer, :midipi, :msg_mean_time, :channels, :listening_channel, :cmd_i
+	attr_accessor :input, :buffer_pointer, :midipi, :msg_mean_time, :channels, :listening_channel, :cmd_i, :program
 	
 	def initialize(midipi)
 	
+		# todo, either programchange or midichannel
+		@program = 1
+		
 		@midipi = midipi
 		@input = UniMIDI::Input.use(:first)
 		@buffer_pointer = 0
@@ -19,6 +25,7 @@ class MidiListener
 		
 	end
 	
+	# get the next command from message buffer item
 	def getNextCommand(msg)
 		if(@cmd_i+1 < msg[:data].length)
 			@cmd_i+=1
@@ -28,11 +35,14 @@ class MidiListener
 		return nil
 	end
 	
+	# iterate the UniMidi inputbuffer
 	def run
 		$log.info("listening")
 		buffer_length = 0
 		last_msg_time = Time.now
 		current_msg_time = Time.now
+		
+		# main loop
 		while true
 		
 			buffer_length = @input.buffer.length
@@ -43,17 +53,18 @@ class MidiListener
 				
 				current_msg_time = Time.now
 				
-				
 				for @cmd_i in 0..msg[:data].length-1
 					
 		 			command = msg[:data][@cmd_i]
 		 			
+		 			# timing message
 					if command != 248
 						#puts "data: %s, timestamp: %s" % [msg[:data], msg[:timestamp]]
 					else
 						#puts msg[:timestamp]
 					end
 					
+					# midi pitchbend
 					if command == @midichan.pitchbend
 						lsbvalue = getNextCommand(msg)
 						msbvalue = getNextCommand(msg)
@@ -62,6 +73,7 @@ class MidiListener
 						
 					end
 					
+					# midi cc messages
 					if command == @midichan.control_change
 						puts "data: %s, timestamp: %s" % [msg[:data], msg[:timestamp]]
 						
@@ -71,70 +83,35 @@ class MidiListener
 						value = value.nil? ? 114 : value
 						
 						case control
-							when 14
+							when midipi.MIDIPI_SPEED_MESSAGE
 								midipi.command_speed(value)
-							when 15
+							when midipi.MIDIPI_PITCH_MESSAGE
 								midipi.command_bend(value)
 						end
 						
 						next
 					end
 					
+					# midi note on
 					if command == @midichan.note_on
 					
 						note = nil
 						note = getNextCommand(msg)
 						
 						if(!note.nil?)
-							
-							case note
-							
-							when 1
-								puts "touch"
-								midipi.speech("touch")
-							when 2 
-								puts "that"
-								midipi.speech("that")
-							when 3
-								puts "ass"
-								midipi.speech("ass") 
-							when 4
-								midipi.speech("stay") 
-							when 5
-								midipi.speech("a") 
-							when 6
-								midipi.speech("while") 
-							when 7
-								midipi.speech("forever")
-							end
-							
-							#midipi.speech_code(128+note)
+							midipi.speech_program(@program, note)
 						end
 				
 						next
 					end
 				end
 				
-				
-				
 				last_msg_time = current_msg_time
 				@buffer_pointer+=1
 				
 			end
-			sleep(0.009)
+			sleep(0.009) # make the while loop less cpu intense
 			
 		end
 	end
 end
-
-class MidiChannel
-	attr_accessor :pitchbend, :note_on, :note_off, :control_change
-	
-	def initialize(pitchbend, note_on, note_off, control_change)
-		@note_on = note_on
-		@note_off = note_off
-		@control_change = control_change
-		@pitchbend = pitchbend
-	end
-end
-

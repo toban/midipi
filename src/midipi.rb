@@ -10,8 +10,11 @@ class MidiPi
 
 	attr_accessor :ser, :pitch, :speed, :bend, :dict, :programs
 	
+	@@MIDIPI_SPEED_MESSAGE = 14
+	@@MIDIPI_PITCH_MESSAGE = 15
+	
 	def initialize
-		#@ser = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
+		@ser = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
 		@pitch = 0
 		
 		@dict = {
@@ -29,9 +32,15 @@ class MidiPi
 		
 	end
 	
+	# loads each program in program folder
 	def init_programs
 		$log.info("loading programs ...")
-		Dir["./programs/*.rb"].each {|file| require file }
+		Dir["./programs/*.rb"].each {|file| 
+		begin 
+			require file 
+		rescue LoadError, SyntaxError
+			$log.info("failed to load program %s" % file.to_s) 
+		end}
 		
 		$programs.each do |program| 
 			@programs[program.program_id] = program
@@ -98,12 +107,15 @@ class MidiPi
 		@ser.serialPutchar(code)
 	end
 	
-	def speech(word)
-		
-		sentence = nil
-		
-		sentence = @dict[word]
-		
+	# load note from program and say it
+	def speech_program(program_id, note)
+		word_note = @programs[program_id][note]
+		if !word_note.nil?
+			return speech(word_note.code)
+		end
+	end
+	
+	def speech(sentence)
 		if !sentence.nil? 
 			sentence.each do |i|
 			@ser.serialPutchar(i)

@@ -1,9 +1,12 @@
+# contained within programs hash
+# code = speakjet code
+# name = description
 class WordNote
 	
-	attr_accessor :speakjet_code, :name
+	attr_accessor :code, :name
 		
 	def initialize(code, name)
-		@speakjet_code = code
+		@code = code
 		@name = name
 	end
 	

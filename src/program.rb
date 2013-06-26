@@ -24,4 +24,8 @@ class Program
 		end
 	end
 	
+	def [](note)
+		return @msg_map[note]
+	end
+	
 end
