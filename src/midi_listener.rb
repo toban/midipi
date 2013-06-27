@@ -9,7 +9,7 @@ class MidiListener
 	def initialize(midipi)
 	
 		# todo, either programchange or midichannel
-		@program = 1
+		@program = 2
 		
 		@midipi = midipi
 		@input = UniMIDI::Input.use(:first)
@@ -99,6 +99,7 @@ class MidiListener
 						note = getNextCommand(msg)
 						
 						if(!note.nil?)
+							
 							midipi.speech_program(@program, note)
 						end
 				

@@ -8,10 +8,10 @@ require './program.rb'
 
 class MidiPi
 
-	attr_accessor :ser, :pitch, :speed, :bend, :dict, :programs
+	attr_accessor :ser, :pitch, :speed, :bend, :dict, :programs, :MIDIPI_PITCH_MESSAGE, :MIDIPI_SPEED_MESSAGE
 	
-	@@MIDIPI_SPEED_MESSAGE = 14
-	@@MIDIPI_PITCH_MESSAGE = 15
+	@MIDIPI_SPEED_MESSAGE = 14
+	@MIDIPI_PITCH_MESSAGE = 15
 	
 	def initialize
 		@ser = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
@@ -109,8 +109,11 @@ class MidiPi
 	
 	# load note from program and say it
 	def speech_program(program_id, note)
+		
+		
 		word_note = @programs[program_id][note]
 		if !word_note.nil?
+			$log.info("speaking: %s" % word_note.inspect)
 			return speech(word_note.code)
 		end
 	end
@@ -166,5 +169,7 @@ midipi.reset
 
 threads.each { |t| t.join }
 midipi.release
+
+
 
 

@@ -9,11 +9,11 @@ class Program
 		@program_id = request_id
 		@msg_map = Hash.new
 		
-		midi_key = 1
+		midi_key = 0
 		
 		words.keys.each do |key|
 			
-			if midi_key == 128
+			if midi_key == 127
 				break			
 			end
 			
