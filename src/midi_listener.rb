@@ -1,5 +1,5 @@
-require 'unimidi'
-require './midi_channel.rb'
+require 'unimidi' 
+require File.join(File.dirname(__FILE__), 'midi_channel.rb')
 
 #
 # midi listener uses UniMidi to listen for messages and tell midipi what to do
@@ -9,7 +9,7 @@ class MidiListener
 	def initialize(midipi)
 	
 		# todo, either programchange or midichannel
-		@program = 2
+		@program = 3
 		
 		@midipi = midipi
 		@input = UniMIDI::Input.use(:first)

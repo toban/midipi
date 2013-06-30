@@ -1,31 +1,25 @@
-#! /usr/bin/ruby
 require 'wiringpi'
-require './init.rb'
-require './midi_listener.rb'
-require './program.rb'
+
+require File.join(File.dirname(__FILE__), 'init.rb')
+require File.join(File.dirname(__FILE__), 'midi_listener.rb') 
+require File.join(File.dirname(__FILE__), 'program.rb')
 
 
 
 class MidiPi
 
-	attr_accessor :ser, :pitch, :speed, :bend, :dict, :programs, :MIDIPI_PITCH_MESSAGE, :MIDIPI_SPEED_MESSAGE
+	attr_accessor :ser, :gpio,
+	:pitch, :speed, :bend, :dict, :programs, :MIDIPI_PITCH_MESSAGE, :MIDIPI_SPEED_MESSAGE
 	
-	@MIDIPI_SPEED_MESSAGE = 14
-	@MIDIPI_PITCH_MESSAGE = 15
+
 	
 	def initialize
+		@gpio = WiringPi::GPIO.new(WPI_MODE_GPIO)
 		@ser = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
 		@pitch = 0
 		
-		@dict = {
-		"a" => [154, 128],
-		"stay" => [187, 191,154, 7, 128],
-		"while" => [185, 155, 8, 145],
-		"forever" => [186, 153, 130, 166, 7, 151],
-		"touch" => [20,8, 191, 8, 134, 182],
-		"that" => [20, 96, 88, 169, 8, 132, 8, 191],
-		"ass" => [20, 96, 88, 132, 132, 8, 187, 187]
-		}
+		@MIDIPI_SPEED_MESSAGE = 14
+		@MIDIPI_PITCH_MESSAGE = 15
 		
 		@programs = Hash.new
 		init_programs
@@ -35,7 +29,7 @@ class MidiPi
 	# loads each program in program folder
 	def init_programs
 		$log.info("loading programs ...")
-		Dir["./programs/*.rb"].each {|file| 
+		Dir[File.join(File.dirname(__FILE__), "/programs/*.rb")].each {|file| 
 		begin 
 			require file 
 		rescue LoadError, SyntaxError
@@ -49,6 +43,7 @@ class MidiPi
 	end
 	
 	def reset
+		$log.info("speakjet reset")
 		@ser.serialPuts('W')
 	end
 	
@@ -157,18 +152,6 @@ class MidiPi
 end
 
 
-	
-midipi = MidiPi.new
-
-threads = []
-threads << Thread.new {MidiListener.new(midipi).run} 
-
-midipi.set_serial_mode
-midipi.reset
-
-
-threads.each { |t| t.join }
-midipi.release
 
 
 

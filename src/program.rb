@@ -1,4 +1,4 @@
-require './word_note.rb'
+require File.join(File.dirname(__FILE__), 'word_note.rb')
 class Program
 	
 
