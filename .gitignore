@@ -10,5 +10,6 @@
 *.lai
 *.la
 *.a
+*.pid
 tools/*
 .gitignore*
