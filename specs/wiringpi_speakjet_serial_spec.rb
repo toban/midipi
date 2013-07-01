@@ -3,7 +3,7 @@ require 'wiringpi'
 require './src/midipi.rb'
 
 describe MidiPi, "input" do
-  it "should do serial tx rx with speakjet" do
+  it "should do get speaking status from flowcontrol pin" do
 	midipi = MidiPi.new
 	midipi.reset
 	midipi.speech([194, 134, 140, 7, 198, 7, 160, 191, 133, 148])
