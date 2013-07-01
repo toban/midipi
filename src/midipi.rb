@@ -19,7 +19,6 @@ class MidiPi
 		@pitch = 0
 		
 		@dictionaries = []
-		@dictionaries << CmuParser.new
 		
 		@MIDIPI_SPEED_MESSAGE = 14
 		@MIDIPI_PITCH_MESSAGE = 15
@@ -35,6 +34,11 @@ class MidiPi
 		
 	end
 	
+	def init_dictionary
+		$log.info('loading dictionaries ...')
+		@dictionaries << CmuParser.new
+	end
+	
 	# loads each program in program folder
 	def init_programs
 		$log.info("loading programs ...")
@@ -47,9 +51,13 @@ class MidiPi
 		
 		$programs.each do |program|
 			
-			program.words.keys.each do |key|
+			program.msg_map.keys.each do |key|
 				
 				if(program[key].nil?)
+					
+					if(@dictionaries.length == 0)
+						init_dictionary
+					end
 					
 					@dictionaries.each do |dict|
 						if(dict.word_hash.has_key?(key))
