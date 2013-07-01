@@ -3,6 +3,7 @@ require 'wiringpi'
 require File.join(File.dirname(__FILE__), 'init.rb')
 require File.join(File.dirname(__FILE__), 'midi_listener.rb') 
 require File.join(File.dirname(__FILE__), 'program.rb')
+require File.join(File.dirname(__FILE__), '../util/parse_cmu.rb')
 
 
 
@@ -10,19 +11,27 @@ class MidiPi
 
 	attr_accessor :ser, :gpio,
 	:pitch, :speed, :bend, :dict, :programs, :MIDIPI_PITCH_MESSAGE, :MIDIPI_SPEED_MESSAGE
+	:dictionaries
 	
 
 	
 	def initialize
-		@gpio = WiringPi::GPIO.new(WPI_MODE_GPIO)
-		@ser = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
 		@pitch = 0
+		
+		@dictionaries = []
+		@dictionaries << CmuParser.new
 		
 		@MIDIPI_SPEED_MESSAGE = 14
 		@MIDIPI_PITCH_MESSAGE = 15
 		
 		@programs = Hash.new
 		init_programs
+		
+		puts @programs
+		
+		@gpio = WiringPi::GPIO.new(WPI_MODE_GPIO)
+		@ser = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
+
 		
 	end
 	
@@ -36,7 +45,19 @@ class MidiPi
 			$log.info("failed to load program %s" % file.to_s) 
 		end}
 		
-		$programs.each do |program| 
+		$programs.each do |program|
+			
+			program.words.keys.each do |key|
+				
+				if(program[key].nil?)
+					
+					@dictionaries.each do |dict|
+						if(dict.word_hash.has_key?(key))
+							program[key] = dict.word_hash[key]
+						end
+					end
+				end
+			end
 			@programs[program.program_id] = program
 		end
 		$log.info("loaded %s programs!" % programs.count)
