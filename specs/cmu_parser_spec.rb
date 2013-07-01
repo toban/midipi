@@ -6,5 +6,6 @@ describe CmuParser, "init" do
 	parser = CmuParser.new
 	parser.word_hash.keys.count.should == 133315
 	puts parser.word_hash['CALCULATE'].inspect
+	puts parser.word_hash['TRANSFORM'].inspect
   end
 end
