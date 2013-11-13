@@ -9,7 +9,7 @@ class MidiListener
 	def initialize(midipi)
 	
 		# todo, either programchange or midichannel
-		@program = 3
+		@program = 2
 		
 		@midipi = midipi
 		@input = UniMIDI::Input.use(:first)
