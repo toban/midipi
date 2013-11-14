@@ -131,11 +131,18 @@ class MidiPi
 		@ser.serialPutchar(code)
 	end
 	
+        def stop_speaking
+                $log.info("stop. clear buffer ...")
+                @ser.serialPuts('\S')
+                @ser.serialPuts('\R')
+        end
+        
 	# load note from program and say it
 	def speech_program(program_id, note)
 		
 		
 		word_note = @programs[program_id][note]
+                stop_speaking()
 		if !word_note.nil?
 			$log.info("speaking: %s" % word_note.inspect)
 			return speech(word_note.code)

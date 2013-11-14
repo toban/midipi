@@ -10,6 +10,7 @@ class MidiListener
 	
 		# todo, either programchange or midichannel
 		@program = 5
+		$log.info("program is %s" % @program)
 		@midipi = midipi
 		@input = UniMIDI::Input.use(:first)
 		@buffer_pointer = 0
