@@ -2,6 +2,7 @@ require 'wiringpi'
 
 require File.join(File.dirname(__FILE__), 'init.rb')
 require File.join(File.dirname(__FILE__), 'midi_listener.rb') 
+require File.join(File.dirname(__FILE__), 'adcv_listener.rb') 
 require File.join(File.dirname(__FILE__), 'program.rb')
 require File.join(File.dirname(__FILE__), '../util/parse_cmu.rb')
 
@@ -89,7 +90,7 @@ class MidiPi
 	
 	def exit_serial_mode
 		$log.info("exit serial")
-		@ser.serialPuts('A') # exit serial
+		@ser.serialPuts('\A') # exit serial
 	end
 	
 	def command_bend(value)
@@ -132,9 +133,11 @@ class MidiPi
 	end
 	
         def stop_speaking
+                set_serial_mode
                 $log.info("stop. clear buffer ...")
-                @ser.serialPuts('\S')
-                @ser.serialPuts('\R')
+                @ser.serialPuts('S')
+                @ser.serialPuts('R')
+                exit_serial_mode
         end
         
 	# load note from program and say it
@@ -156,34 +159,7 @@ class MidiPi
 			end
 		end
 	end
-	
-	
-	def osctest
-		set_serial_mode
-		$log.info("osctest")
 
-		# envelope freq
-		#@ser.serialPuts('0J')
-		#@ser.serialPuts('10N') # 1100010		
-		
-		osctest_freq
-		
-		# envelope control
-		@ser.serialPuts('8J')
-		@ser.serialPuts('98N') # 1100010
-		
-		@ser.serialPuts('1J')
-		@ser.serialPuts('200N')
-		@ser.serialPuts('11J')
-		@ser.serialPuts('16N')
-
-	end
-	
-	def osctest_freq
-		@ser.serialPuts('0J')
-		
-		@ser.serialPuts('%sN' % rand(255)) # 1100010	
-	end 
 
 end
 
