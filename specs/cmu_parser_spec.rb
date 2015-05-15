@@ -5,19 +5,15 @@ describe CmuParser, "init" do
   it "should read lines and not crash" do
 	parser = CmuParser.new
 	parser.word_hash.keys.count.should == 133315
-        puts "ASDFFAS"
-	puts parser.word_hash['CAT'].inspect
-	puts parser.word_hash['ACID'].inspect
-	puts parser.word_hash['MUSIC'].inspect
-	puts parser.word_hash['GIVE'].inspect
-	puts parser.word_hash['THE'].inspect
-	puts parser.word_hash['TO'].inspect
-	puts parser.word_hash['WATCH'].inspect
-	puts parser.word_hash['IT'].inspect
-	puts parser.word_hash['DANCE'].inspect
-	puts parser.word_hash['FUCK'].inspect
-	puts parser.word_hash['GO'].inspect
-	puts parser.word_hash['CRAZY'].inspect
-	puts parser.word_hash['ON'].inspect
+	puts parser.word_hash['DISTRACT'].inspect
+	puts parser.word_hash['DISTRACTING'].inspect
+	puts parser.word_hash['DISTRACTIONS'].inspect
+	puts parser.word_hash['DISTRACTED'].inspect
+	puts parser.word_hash['AIR'].inspect
+	puts parser.word_hash['INTERNET'].inspect
+	puts parser.word_hash['WEBSITE'].inspect
+	puts parser.word_hash['DOWNLOAD'].inspect
+	puts parser.word_hash['FREE'].inspect
+	puts parser.word_hash['WARES'].inspect
   end
 end
