@@ -5,7 +5,7 @@ midipi = MidiPi.new
 
 threads = []
 threads << MidiListener.new(midipi)
-threads << MCP3008.new(midipi, 0)
+#threads << MCP3008.new(midipi, 0)
 
 midipi.set_serial_mode
 midipi.reset
