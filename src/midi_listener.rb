@@ -9,7 +9,7 @@ class MidiListener
 	def initialize(midipi)
 	
 		# todo, either programchange or midichannel
-		@program = 6
+		@program = 7
 		$log.info("midilistener: program is %s" % @program)
 		@midipi = midipi
 		@input = UniMIDI::Input.use(:first)
@@ -37,8 +37,7 @@ class MidiListener
 	
 	# iterate the UniMidi inputbuffer
 	def poll()
-		#$log.info("polling midi")
-                
+
 		buffer_length = 0
 		last_msg_time = Time.now
 		current_msg_time = Time.now
@@ -58,6 +57,8 @@ class MidiListener
                                 
                                 # timing message
                                 if command != 248
+                                        #$log.info("data: %s, timestamp: %s" % [msg[:data], msg[:timestamp]])
+                                        
                                         #puts "data: %s, timestamp: %s" % [msg[:data], msg[:timestamp]]
                                 else
                                         #puts msg[:timestamp]
@@ -110,7 +111,7 @@ class MidiListener
                         @buffer_pointer+=1
                         
                 end
-                sleep(0.009) # make the while loop less cpu intense
+                sleep(0.001) # make the while loop less cpu intense
                 
 
 	end
