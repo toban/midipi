@@ -2,9 +2,9 @@
 require 'rubygems' 
 require 'net/ssh' 
 require 'net/scp'  
-HOST = '192.168.1.4' 
+HOST = '192.168.1.8' 
 USER = 'pi' 
-PASS = 'Kickflip.!"#' 
+PASS = 'raspberry' 
 
 remote_path = "/home/pi/midipi"
 exec_path = "/src/midipi_daemon.rb restart"
