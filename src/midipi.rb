@@ -5,6 +5,7 @@ require File.join(File.dirname(__FILE__), 'midi_listener.rb')
 require File.join(File.dirname(__FILE__), 'adcv_listener.rb') 
 require File.join(File.dirname(__FILE__), 'program.rb')
 require File.join(File.dirname(__FILE__), '../util/parse_cmu.rb')
+require File.join(File.dirname(__FILE__), '../util/word_db.rb')
 
 
 
@@ -20,7 +21,6 @@ class MidiPi
 		@pitch = 0
 		
 		@dictionaries = []
-		
 		@MIDIPI_SPEED_MESSAGE = 14
 		@MIDIPI_PITCH_MESSAGE = 15
 		
@@ -31,13 +31,14 @@ class MidiPi
 		
 		@gpio = WiringPi::GPIO.new(WPI_MODE_GPIO)
 		@ser = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
-
+		
 		
 	end
 	
 	def init_dictionary
 		$log.info('loading dictionaries ...')
-		@dictionaries << CmuParser.new
+		@dictionaries << WordDB.new
+		puts @dictionaries.inspect
 	end
 	
 	# loads each program in program folder
@@ -142,7 +143,6 @@ class MidiPi
         
 	# load note from program and say it
 	def speech_program(program_id, note)
-		
 		
 		word_note = @programs[program_id][note]
                 stop_speaking()

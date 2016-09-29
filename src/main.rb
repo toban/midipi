@@ -9,11 +9,13 @@ threads << MidiListener.new(midipi)
 
 midipi.set_serial_mode
 midipi.reset
+midipi.speech_program(7,0);
 
+'''
 while(true)
   for i in threads
     i.poll()
   end
 end
-
+'''
 midipi.release

@@ -5,6 +5,10 @@ class CmuParser
 	attr_accessor :doc, :map, :word_hash
 	
 	def initialize
+		parse()
+	end
+	
+	def parse()
 		@doc = File.new(File.join(File.dirname(__FILE__), '../dictionary/cmudict.0.7a.txt'), 'r')
 		count = 0
 		init_map
@@ -20,7 +24,7 @@ class CmuParser
 		end
 		puts @word_hash.keys.count
 	end
-	
+
 	def get_segment_matches(segment)
 		
 		code = []
