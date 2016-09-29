@@ -5,7 +5,6 @@ describe CmuParser, "init" do
   it "should read lines and not crash" do
 	parser = CmuParser.new
 	parser.word_hash.keys.count.should == 133315
-        puts "ASDFFAS"
 	puts parser.word_hash['DISTRACT'].inspect
 	puts parser.word_hash['DISTRACTING'].inspect
 	puts parser.word_hash['DISTRACTIONS'].inspect
