@@ -15,5 +15,7 @@ configuration
 	- to something like dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline rootwait
 
 
-unimidi
-	- apt-get install libasound2-dev
+# os dependencies
+
+apt-get install libasound2-dev libffi-dev ruby-dev libsqlite3-dev
+
