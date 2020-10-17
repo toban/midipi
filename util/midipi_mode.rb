@@ -1,0 +1,9 @@
+module MIDIPI_MODE
+  PLAY_MODE = 1
+  SYNTHESIZER_MODE = 3
+  TRIGGER_MODE = 2
+end
+
+module GUI_MODE
+  SELECT_WORD = 1
+end
