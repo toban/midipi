@@ -19,3 +19,42 @@ configuration
 
 apt-get install libasound2-dev libffi-dev ruby-dev libsqlite3-dev
 
+
+building programs
+======
+
+```
+pi@raspberrypi:~/midipi/src $ sudo ruby main.rb --message="HELLO WORLD"
+```
+
+will output the program ruby file in the console like this
+
+```
+$programs << Program.new(
+{
+	:hello	 => [183, 8, 134, 145, 8, 14, 137],
+	:world	 => [147, 8, 14, 176, 145, 174],
+},7, "Untitled program")
+
+```
+
+example program
+======
+```
+$programs << Program.new(
+{
+	:ice=> [8, 14, 155, 187],
+	:hockey => [183, 8, 14, 135, 194, 8, 128],
+	:you => [158, 8, 14, 139],
+	:make => [140, 130, 194],
+	:goal => [179, 8, 14, 137, 145],
+	:great => [179, 148, 130, 191],
+	:job => [165, 8, 14, 135, 170],
+	:play=> [198, 145, 130]
+	
+
+
+},5, "ice hockey")
+
+```
+

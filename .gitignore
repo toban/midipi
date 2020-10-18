@@ -13,3 +13,4 @@
 *.pid
 tools/*
 .gitignore*
+src/programs/*
