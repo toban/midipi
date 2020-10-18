@@ -9,8 +9,6 @@ require File.join(File.dirname(__FILE__), 'gui_manager.rb')
 require File.join(File.dirname(__FILE__), '../util/parse_cmu.rb')
 require File.join(File.dirname(__FILE__), '../util/word_db.rb')
 
-
-
 class MidiPi
 
 	attr_accessor :ser, :gpio, :encoder,
@@ -58,7 +56,6 @@ class MidiPi
 		
 		@gpio = WiringPi::GPIO.new#WPI_MODE_GPIO)
 		@ser = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
-		init_dictionary()
 		@midi_listener = MidiListener.new(self)
 
 		@encoder = RotaryEncoder.new(4,5, @gpio)

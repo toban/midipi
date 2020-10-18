@@ -13,7 +13,9 @@ class GuiManager
 		@mode = mode
 		case @mode
 		when GUI_MODE::SELECT_WORD
-			@encoder.set_params(0, @midipi.dictionaries[0].word_hash.count)
+			if not @midipi.dictionaries.empty?
+				@encoder.set_params(0, @midipi.dictionaries[0].word_hash.count)
+			end
 		end
 
 	end
@@ -24,12 +26,13 @@ class GuiManager
 
 		case @mode
 		when GUI_MODE::SELECT_WORD
-			word = @midipi.dictionaries[0].word_hash[@select_word_index]
-			if word != @selected_word
-				puts word.name
-				@selected_word = word
-				#puts @select_word_index
-			#else
+			if not @midipi.dictionaries.empty?
+				word = @midipi.dictionaries[0].word_hash[@select_word_index]
+				if word != @selected_word
+					puts word.name
+					@selected_word = word
+					#puts @select_word_index
+				end
 			end
 		end
 	end

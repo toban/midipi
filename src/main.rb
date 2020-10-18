@@ -1,7 +1,30 @@
 #! /usr/bin/ruby
 require File.join(File.dirname(__FILE__), 'midipi.rb')
+require File.join(File.dirname(__FILE__), 'phrase_builder.rb')
+require 'optparse'
+
+
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: example.rb [options]"
+
+  opts.on("-mMSG", "--message=MSG", "try to build the phrase") do |n|
+    options[:msg] = n.split(' ')
+  end
+
+end.parse!
+
+p options
+p ARGV
+
 
 midipi = MidiPi.new
+phraseBuilder = nil
+
+if options.key?(:msg)
+	midipi.init_dictionary()
+	phraseBuilder = PhraseBuilder.new(midipi, options[:msg])
+end
 
 midipi.set_mode(MIDIPI_MODE::PLAY_MODE)
 
@@ -12,7 +35,6 @@ threads << midipi
 midipi.set_serial_mode
 midipi.reset
 
-midipi.speech_program(2,0);
 '''
  Send "\0"
  Send "8J"  (Set address for Envelope Control)
@@ -27,6 +49,20 @@ midipi.speech_program(2,0);
 
 #sleep(0.5)
 #puts midipi.gpio.methods - Object.methods
+
+#phrases
+while( not phraseBuilder.nil? )
+	phraseBuilder.phrase.each do |word|
+		puts word.name
+		#midipi.command_speed(Random.new.rand(255))
+		midipi.command_bend(Random.new.rand(127))
+		midipi.speech(word.code)
+		print(word.code)
+		sleep(2)
+		midipi.stop_speaking
+
+	end
+end
 
 # words
 '''
