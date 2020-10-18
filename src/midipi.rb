@@ -44,7 +44,6 @@ class MidiPi
 	def initialize()
 		@pitch = 0
 
-		
 		@dictionaries = []
 		@MIDIPI_SPEED_MESSAGE = 14
 		@MIDIPI_PITCH_MESSAGE = 15
@@ -183,15 +182,29 @@ class MidiPi
 		speakjetValue = ((15.0/127.0) * value).round.to_i
 		$log.debug("bend: %s" % speakjetValue)
 		@bend = speakjetValue
-		@ser.serial_put_char(23)
-		@ser.serial_put_char(@bend)
+		#@ser.serial_put_char(23)
+		#@ser.serial_put_char(@bend)
 	end
 	
 	def command_speed(value)
-		$log.debug("speed: %s" % value)
+		$log.info("speed: %s" % value)
 		@speed = value
-		@ser.serial_put_char(21)
-		@ser.serial_put_char(@speed)
+		#@ser.serial_put_char(21)
+		#@ser.serial_put_char(@speed)
+	end
+
+	def update_bend()
+		if not @bend.nil?
+			@ser.serial_put_char(23)
+			@ser.serial_put_char(@bend)
+		end
+	end
+
+	def update_speed()
+		if not @speed.nil?
+			@ser.serial_put_char(21)
+			@ser.serial_put_char(@speed)
+		end
 	end
 	
 	# midi from 0-127
@@ -218,19 +231,24 @@ class MidiPi
 		@ser.serial_put_char(code)
 	end
 	
-        def stop_speaking
-                set_serial_mode
-                $log.info("stop. clear buffer ...")
-                @ser.serial_puts('S')
-                @ser.serial_puts('R')
-                exit_serial_mode
-        end
-        
+	def stop_speaking
+		#$log.info("stop. clear buffer ...")
+		serial_puts('\0');
+		serial_puts('S');
+		serial_puts('R');
+		serial_puts('\A');
+	end
+
 	# load note from program and say it
 	def speech_program(program_id, note)
 		
 		word_note = @programs[program_id][note]
-                stop_speaking()
+        
+        stop_speaking()
+		
+		update_speed
+		update_bend
+
 		if !word_note.nil?
 			$log.info("speaking: %s" % word_note.inspect)
 			return speech(word_note.code)

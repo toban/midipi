@@ -10,7 +10,7 @@ attr_accessor :input, :synthesizer, :midi_freqs, :buffer_pointer, :midipi, :msg_
 def initialize(midipi)
 
 	# todo, either programchange or midichannel
-	@program = 2
+	@program = 8
 	$log.info("midilistener: program is %s" % @program)
 	@midipi = midipi
 	@midi_freqs = []
@@ -78,7 +78,7 @@ def poll(mode)
 	while buffer_length > @buffer_pointer
 
 		msg = @input.buffer[@buffer_pointer]
-		$log.info("midilistener: msg %s" % msg.inspect)
+		#$log.info("midilistener: msg %s" % msg.inspect)
 
 		
 		current_msg_time = Time.now
@@ -103,23 +103,23 @@ def poll(mode)
 					next
 
 				when @midichan.control_change
-					puts "data: %s, timestamp: %s" % [msg[:data], msg[:timestamp]]
+					puts "CC data: %s, timestamp: %s" % [msg[:data], msg[:timestamp]]
 					
 					control = getNextCommand(msg)
 					value = getNextCommand(msg)
 					
 					value = value.nil? ? 114 : value
 
-				   	case mode
-				   		when MIDIPI_MODE::SYNTHESIZER_MODE
-				   		when MIDIPI_MODE::TRIGGER_MODE || MIDIPI_MODE::PLAY_MODE
-							case control
-								when midipi.MIDIPI_SPEED_MESSAGE
-										midipi.command_speed(value)
-								when midipi.MIDIPI_PITCH_MESSAGE
-										midipi.command_bend(value)
-							end
-				   	end
+					puts value
+				   	#case mode
+				   	#	when MIDIPI_MODE::TRIGGER_MODE || MIDIPI_MODE::PLAY_MODE
+					case control
+						when midipi.MIDIPI_SPEED_MESSAGE
+								midipi.command_speed(value)
+						when midipi.MIDIPI_PITCH_MESSAGE
+								midipi.command_bend(value)
+					end
+				   	#end
 					
 	
 					

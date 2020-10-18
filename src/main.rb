@@ -32,8 +32,8 @@ threads = []
 threads << midipi
 #threads << MCP3008.new(midipi, 0)
 
-midipi.set_serial_mode
-midipi.reset
+#midipi.set_serial_mode
+#midipi.reset
 
 '''
  Send "\0"
